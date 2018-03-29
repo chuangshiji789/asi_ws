@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="front_axle_assembly">
+
+
+    <!-- wheel_front_left -->
+      <link name="left_front_wheel">
+        <visual>
+          <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+          <geometry>
+            <cylinder radius="${wheel_front_R}" length="${wheel_front_H}"/>
+          </geometry>
+          <material name="tire_mat"/>
+        </visual>
+
+        <!-- <visual>
+          <origin xyz="0 -0.03 0" rpy="${degrees_90} 0 0"/>
+          <geometry>
+            <mesh filename="package://forklift_description/meshes/front_wheel.dae" scale = "1.02 1.02 1.02" />
+          </geometry>
+        </visual> -->
+
+        <collision>
+          <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+          <geometry>
+            <cylinder radius="${wheel_front_R}" length="${wheel_front_H}"/>
+          </geometry>
+        </collision>
+
+        <xacro:thick_walled_tube_inertial
+            inner_rad="${wheel_front_R - thick_wall}" outer_rad="${wheel_front_R}"
+            height="${wheel_front_H}" mass="${wheel_front_M}">
+        <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+        </xacro:thick_walled_tube_inertial>
+      </link>
+
+    <!-- JOINT wheel_front_left TO chassis -->
+      <joint name="left_front_axle" type="continuous">
+        <parent link="chassis"/>
+        <child link="left_front_wheel"/>
+        <origin xyz="${front_axle_X_offset} ${front_axle_W/2} ${front_axle_Z_offset}"/>
+        <axis xyz="0 1 0"/>
+        <dynamics damping="0.0" friction="0.0"/>
+        <limit effort="${axle_eff_limit}" velocity="${axle_vel_limit}"/>
+      </joint>
+
+      <transmission name="left_front_axle_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="left_front_axle">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="left_front_axle_act">
+          <!-- This hardwareInterface element exists for compatibility
+               with ROS Hydro. -->
+          <hardwareInterface>EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+
+    <!-- wheel_front_right -->
+      <link name="right_front_wheel">
+        <visual>
+          <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+          <geometry>
+            <cylinder radius="${wheel_front_R}" length="${wheel_front_H}"/>
+          </geometry>
+          <material name="tire_mat"/>
+        </visual>
+
+        <!-- <visual>
+          <origin xyz="0 0.03 0" rpy="${-degrees_90} 0 0"/>
+          <geometry>
+            <mesh filename="package://forklift_description/meshes/front_wheel.dae" scale = "1.02 1.02 1.02" />
+          </geometry>
+        </visual> -->
+
+        <collision>
+          <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+          <geometry>
+            <cylinder radius="${wheel_front_R}" length="${wheel_front_H}"/>
+          </geometry>
+        </collision>
+
+        <xacro:thick_walled_tube_inertial
+            inner_rad="${wheel_front_R - thick_wall}" outer_rad="${wheel_front_R}"
+            height="${wheel_front_H}" mass="${wheel_front_M}">
+        <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+        </xacro:thick_walled_tube_inertial>
+      </link>
+
+    <!-- JOINT wheel_front_right TO chassis -->
+      <joint name="right_front_axle" type="continuous">
+        <parent link="chassis"/>
+        <child link="right_front_wheel"/>
+        <origin xyz="${front_axle_X_offset} ${-front_axle_W/2} ${front_axle_Z_offset}"/>
+        <axis xyz="0 1 0"/>
+        <dynamics damping="0.0" friction="0.0"/>
+        <limit effort="${axle_eff_limit}" velocity="${axle_vel_limit}"/>
+      </joint>
+
+      <transmission name="right_front_axle_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="right_front_axle">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="right_front_axle_act">
+          <!-- This hardwareInterface element exists for compatibility
+               with ROS Hydro. -->
+          <hardwareInterface>EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+
+
+
+      <gazebo reference="right_front_wheel">
+          <material>Gazebo/Orange</material>
+  	      <mu1>1</mu1>
+          <mu2>1</mu2>
+      		<kp>10000000</kp>
+      		<kd>1</kd>
+      		<minDepth>0.001</minDepth>
+      		<maxVel>10.0</maxVel>
+      </gazebo>
+
+      <gazebo reference="left_front_wheel">
+          <material>Gazebo/Orange</material>
+  	      <mu1>1</mu1>
+          <mu2>1</mu2>
+      		<kp>10000000</kp>
+      		<kd>1</kd>
+      		<minDepth>0.001</minDepth>
+      		<maxVel>10.0</maxVel>
+      </gazebo>
+
+
+
+</robot>

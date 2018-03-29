@@ -1,0 +1,15 @@
+steering:
+  SPos_P:       10
+  SPos_I:       4
+  SPos_D:       0
+  SPos_Imax:    10
+
+  SVel_max:     10
+  SVel_P:       460
+  SVel_I:       200
+  SVel_D:       0.5
+  SVel_Imax:    100
+
+  STorque_max:  1000
+  SFriction:    1
+  SAngle_max:   45

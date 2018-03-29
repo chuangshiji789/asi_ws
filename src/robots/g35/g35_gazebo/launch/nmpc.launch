@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <group ns="robot1">
+
+
+
+    <include file="$(find loosely_coupled_ekf)/launch/online.launch">
+    </include>
+    <include file="$(find g35_gazebo)/launch/single_g35.launch">
+      <arg name="namespace" value="robot1" />
+      <arg name="tfpre" value="robot1"/>
+      <arg name="x" value="0" />
+      <arg name="y" value="0" />
+      <arg name="z" value="1" />
+    </include>
+
+    <include file="$(find obst_avoid_nmpc_v2)/launch/online.launch">
+    </include>
+
+  </group>
+
+</launch>

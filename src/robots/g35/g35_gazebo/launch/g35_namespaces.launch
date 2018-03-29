@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="use_robot1" default="true"/>
+  <arg name="use_robot2" default="false"/>
+  <!-- Gazebo -->
+  <arg name="world_name" default="worlds/empty.world"/>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find g35_description)/worlds/neighborhood.world"/> <!-- world_name is wrt GAZEBO_RESOURCE_PATH environment variable -->
+    <arg name="paused" value="true"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <!-- RVIZ -->
+  <node pkg="rviz" type="rviz" name="my_rviz"
+        args="-d $(find g35_gazebo)/rviz/simple.rviz"/>
+
+
+  <group if="$(arg use_robot1)" ns="robot1">
+
+    <!--G35-->
+    <include file="$(find loosely_coupled_ekf)/launch/online.launch">
+    </include>
+    <include file="$(find g35_gazebo)/launch/single_g35.launch">
+      <arg name="namespace" value="robot1" />
+      <arg name="tfpre" value="robot1"/>
+      <arg name="teleop" value="false"/>
+      <arg name="teleop_port" value="/dev/input/js0"/>
+      <arg name="x" value="0" />
+      <arg name="y" value="-2.5" />
+      <!-- <arg name="y" value="0.0" /> -->
+      <arg name="z" value="0.5" />
+      <arg name="roll" default="0.0"/>
+      <arg name="pitch" default="0.0"/>
+      <arg name="yaw" default="0.0"/>
+    </include>
+
+    <!--NMPC-->
+    <include file="$(find obst_avoid_nmpc_v2)/launch/online.launch">
+    </include>
+
+    <!--Object Detection-->
+    <include file="$(find depth_clustering)/launch/object_detection.launch">
+      <arg name="min_cluster_size" value="30"/>
+      <arg name="max_cluster_size" value="100000"/>
+      <arg name="smooth_window_size" value="7"/>
+      <arg name="num_beams_arg" value="16"/>
+      <arg name="angle_arg" value="7"/>
+    </include>
+
+    <!--Object Tracking-->
+    <include file="$(find object_tracking)/launch/object_tracking.launch">
+      <arg name="effective_radius" value="30"/>
+      <arg name="effective_height" value="10"/>
+      <arg name="chi_thresh" value="5.99"/>
+    </include>
+
+  </group>
+
+  <group if="$(arg use_robot2)" ns="robot2">
+
+    <!--G35-->
+    <include file="$(find g35_gazebo)/launch/single_g35.launch">
+      <arg name="namespace" value="robot2" />
+      <arg name="tfpre" value="robot2"/>
+      <arg name="teleop" value="true"/>
+      <arg name="teleop_port" value="/dev/input/js0"/>
+      <arg name="x" value="20" />
+      <arg name="y" value="10" />
+      <arg name="z" value="0.5" />
+      <arg name="roll" default="0.0"/>
+      <arg name="pitch" default="0.0"/>
+      <arg name="yaw" default="-1.57"/>
+    </include>
+
+  </group>
+
+
+
+
+</launch>

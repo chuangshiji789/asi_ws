@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="gps">
+  <!-- <xacro:property name="M_PI" value="3.1415926535897931" /> -->
+  <xacro:property name="gps_link" value="0.05" /> <!-- Size of square 'camera' box -->
+  <xacro:property name="gps_R" value="0.10"/>
+  <xacro:property name="gps_H" value="0.04"/>
+  <xacro:property name="gps_M" value="1"/>
+  <xacro:macro name="gps" params="parent name topic *origin">
+
+    <joint name="gps_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="gps_link"/>
+    </joint>
+
+    <link name="gps_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${gps_R}" length="${gps_H}"/>
+        </geometry>
+        <material name="tire_mat"/>
+      </visual>
+
+      <!-- <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://g35_description/meshes/wheel_2004_Infiniti_G35_Sedan.dae" scale = "0.95 0.95 0.95" />
+        </geometry>
+        <material name="tire_mat"/>
+      </visual> -->
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${gps_R}" length="${gps_H}"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="1e-5" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+      </inertial>
+    </link>
+
+    <!-- gps plugin -->
+    <gazebo>
+      <plugin name="quadrotor_gps_sim" filename="libhector_gazebo_ros_gps.so">
+        <updateRate>10.0</updateRate>
+        <bodyName>gps_link</bodyName>
+        <frameId>base_link</frameId>
+        <topicName>fix</topicName>
+        <velocityTopicName>fix_velocity</velocityTopicName>
+        <referenceLatitude>49.860246</referenceLatitude>
+        <referenceLongitude>8.687077</referenceLongitude>
+        <drift>5.0 5.0 5.0</drift>
+        <gaussianNoise>0.01 0.01 0.01</gaussianNoise>
+        <velocityDrift>0 0 0</velocityDrift>
+        <velocityGaussianNoise>0.05 0.05 0.05</velocityGaussianNoise>
+      </plugin>
+
+    </gazebo>
+
+
+  </xacro:macro>
+</robot>

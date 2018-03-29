@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+
+<launch>
+
+  <arg name="namespace" default="/"/>
+  <arg name="world_name" default="worlds/empty.world"/>
+  <!-- <arg name="cmd_timeout" default="0.5"/> -->
+
+  <!-- Vehicle pose -->
+<!--   <arg name="x" default="0.0"/>
+  <arg name="y" default="0.0"/>
+  <arg name="z" default="0.5"/>
+  <arg name="roll" default="0.0"/>
+  <arg name="pitch" default="0.0"/>
+  <arg name="yaw" default="0.0"/> -->
+
+      <!-- Create the world. -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="world_name" value="$(arg world_name)"/>
+    </include>
+
+<!-- Convert xacro and put on parameter server -->
+<param name="robot_description" command="$(find xacro)/xacro.py $(find prowler_vehicle_description)/urdf/steering_linkage/front_axle.urdf.xacro" />
+
+<!-- Spawn a robot into Gazebo -->
+<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model utv" />
+</launch>

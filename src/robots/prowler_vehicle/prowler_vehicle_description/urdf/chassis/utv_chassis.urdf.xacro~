@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="utv_chassis">
+
+ <!-- Add the parameters file -->
+ <xacro:include filename="$(find prowler_vehicle_description)/urdf/chassis/parameters.urdf.xacro"/>
+
+
+
+
+  <!-- Inertia of a solid cuboid. Width is measured along the x axis, depth
+       along the y axis, and height along the z axis. -->
+  <xacro:macro name="solid_cuboid_inertial"
+               params="width depth height mass *origin">
+    <inertial>
+      <mass value="${mass}"/>
+      <xacro:insert_block name="origin" /> 
+      <inertia ixx="${mass * (depth * depth + height * height) / 12}"
+               ixy="0" ixz="0"
+               iyy="${mass * (width * width + height * height) / 12}"
+               iyz="0"
+               izz="${mass * (width * width + depth * depth) / 12}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- Inertia of a thick-walled cylindrical tube with open ends. Height is
+       measured along the z axis, which is the tube's axis. inner_rad and
+       outer_rad are the tube's inner and outer radii, respectively. -->
+  <xacro:macro name="thick_walled_tube_inertial"
+               params="inner_rad outer_rad height mass *origin">
+    <inertial>
+      <xacro:insert_block name="origin" /> 
+      <mass value="${mass}"/>
+      <inertia ixx="${(1 / 12) * mass * (3 * (inner_rad * inner_rad +
+                    outer_rad * outer_rad) + height * height)}"
+               ixy="0" ixz="0"
+               iyy="${(1 / 12) * mass * (3 * (inner_rad * inner_rad +
+                    outer_rad * outer_rad) + height * height)}"
+               iyz="0"
+               izz="${mass * (inner_rad * inner_rad +
+                    outer_rad * outer_rad) / 2}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- Used for fixing robot to Gazebo 'base_link' -->
+  <!-- <link name="world"/> -->
+
+  <!-- base_link must have geometry so that its axes can be displayed in
+       rviz. -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="chassis_mat"/>
+    </visual>
+  </link>
+  <gazebo reference="base_link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+
+  <!-- chassis-->
+    <link name="chassis">
+      <visual>
+        <origin xyz="-0.10 0 0.40" rpy="0 0 0"/>
+        <geometry>
+          <!-- <box size="${chassis_L} ${chassis_W} ${chassis_H}"/> -->
+          <mesh filename="package://prowler_vehicle_description/meshes/vehicle_chassis.dae" />
+        </geometry>
+        <material name="tire_mat"/>
+      </visual>
+
+      <!--collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${chassis_L} ${chassis_W} ${chassis_H}"/>
+        </geometry>
+      </collision-->
+
+      <collision>
+        <origin xyz="-0.10 0 0.40" rpy="0 0 0"/>
+        <geometry>
+          <!-- <box size="${chassis_L} ${chassis_W} ${chassis_H}"/> -->
+          <mesh filename="package://prowler_vehicle_description/meshes/vehicle_chassis.dae" />
+        </geometry>
+      </collision>
+
+      <xacro:solid_cuboid_inertial
+          width="${chassis_L}" depth="${chassis_W}"
+          height="${chassis_H}" mass="${chassis_M}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:solid_cuboid_inertial>
+    </link>
+
+
+  <joint name="base_link_to_chassis" type="fixed">
+    <parent link="base_link"/>
+    <child link="chassis"/>
+  </joint>
+
+
+<!--   <joint name="world_to_chassis_joint" type="fixed">
+    <parent link="world"/>
+    <child link="chassis"/>
+    <origin xyz="0 0 2" />
+  </joint> -->
+
+
+ <xacro:include filename="$(find prowler_vehicle_description)/urdf/chassis/front_axle.urdf.xacro"/>
+
+ <xacro:include filename="$(find prowler_vehicle_description)/urdf/chassis/rear_axle.urdf.xacro"/>
+
+<!-- gazebo_ros_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
+  </gazebo>
+
+</robot>

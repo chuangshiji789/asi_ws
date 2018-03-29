@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!--Add params to parameter server-->
+  <arg name="effective_radius" default="10"/>
+  <arg name="effective_height" default="1"/>
+  <arg name="chi_thresh" default="5.99"/>
+
+  <param name="effective_radius" value="$(arg effective_radius)"/>
+  <param name="effective_height" value="$(arg effective_height)"/>
+  <param name="chi_thresh" value="$(arg chi_thresh)"/>
+
+
+  <!--Add command line arguments-->
+  <!-- <arg name="num_beams_arg" default="16"/> -->
+
+  <!--Run obstacle detection node-->
+  <node name="object_tracking" pkg="object_tracking" type="tracker_v4"
+        output="screen"
+         />
+
+
+</launch>

@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="steering_linkage">
+
+  <!-- Degree-to-radian conversions -->
+  <xacro:property name="degrees_45" value="0.785398163"/>
+  <xacro:property name="degrees_90" value="1.57079633"/>
+
+  <!--Steering linkage properties -->
+  <xacro:property name="steer_beam_L" value="0.10" />
+  <xacro:property name="steer_beam_W" value="1.12" />
+  <xacro:property name="steer_beam_H" value="0.10" />
+  <xacro:property name="steer_beam_M" value="10" />
+
+
+  <xacro:property name="steer_linkage_L" value="0.05" />
+  <xacro:property name="steer_linkage_W" value="1.12" />
+  <xacro:property name="steer_linkage_H" value="0.05" />
+  <xacro:property name="steer_linkage_M" value="5" />
+
+
+  <xacro:property name="control_arm_L" value="0.30" />
+  <xacro:property name="control_arm_W" value="0.10" />
+  <xacro:property name="control_arm_H" value="0.10" />
+  <xacro:property name="control_arm_M" value="2" />
+
+  <xacro:property name="joint_offset" value="0.025" />
+
+  <!--Materials -->
+  <material name="mat_1">
+    <color rgba="0 0 1 1"/>
+  </material>
+  <material name="mat_2">
+    <color rgba="0.5 0.5 0.5 1"/>
+  </material>
+  <material name="mat_3">
+    <color rgba="0 0 0 1"/>
+  </material>
+
+  <!-- Macros -->
+
+  <!-- Inertia of a solid cuboid. Width is measured along the x axis, depth
+       along the y axis, and height along the z axis. -->
+  <xacro:macro name="solid_cuboid_inertial"
+               params="width depth height mass">
+    <inertial>
+      <mass value="${mass}"/>
+      <origin/>
+      <inertia ixx="${mass * (depth * depth + height * height) / 12}"
+               ixy="0" ixz="0"
+               iyy="${mass * (width * width + height * height) / 12}"
+               iyz="0"
+               izz="${mass * (width * width + depth * depth) / 12}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- Used for fixing robot to Gazebo 'base_link' -->
+  <link name="world"/>
+
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="steer_beam"/>
+  </joint>
+
+
+  <!-- steer_beam-->
+    <link name="steer_beam">
+      <visual>
+        <origin xyz="0 0 ${steer_beam_H/2}" rpy="0 0 0" />
+        <geometry>
+          <box size="${steer_beam_L} ${steer_beam_W} ${steer_beam_H}"/>
+        </geometry>
+        <material name="mat_1"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 ${steer_beam_H/2} " rpy="0 0 0" />
+        <geometry>
+          <box size="${steer_beam_L} ${steer_beam_W} ${steer_beam_H}"/>
+        </geometry>
+      </collision>
+
+      <xacro:solid_cuboid_inertial
+         width="${steer_beam_L}" depth="${steer_beam_W}"
+         height="${steer_beam_H}" mass="${steer_beam_M}">
+      </xacro:solid_cuboid_inertial>
+    </link>
+
+    <gazebo reference="steer_beam">
+      <material>Gazebo/Blue</material>
+    </gazebo>
+
+
+
+
+  <!-- control_arm left -->
+    <link name="control_arm_left">
+      <visual>
+        <origin xyz="${-control_arm_L/2 + joint_offset} 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <box size="${control_arm_L} ${control_arm_W} ${control_arm_H}"/>
+        </geometry>
+        <material name="mat_3"/>
+      </visual>
+
+      <collision>
+        <origin xyz="${-control_arm_L/2 + joint_offset} 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <box size="${control_arm_L} ${control_arm_W} ${control_arm_H}"/>
+        </geometry>
+      </collision>
+
+      <xacro:solid_cuboid_inertial
+         width="${control_arm_L}" depth="${control_arm_W}"
+         height="${control_arm_H}" mass="${control_arm_M}">
+      </xacro:solid_cuboid_inertial>
+    </link>
+
+  <!-- control_arm right -->
+    <link name="control_arm_right">
+      <visual>
+        <origin xyz="${-control_arm_L/2 + joint_offset} 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <box size="${control_arm_L} ${control_arm_W} ${control_arm_H}"/>
+        </geometry>
+        <material name="mat_3"/>
+      </visual>
+
+      <collision>
+        <origin xyz="${-control_arm_L/2 + joint_offset} 0 0 " rpy="0 0 0"/>
+        <geometry>
+          <box size="${control_arm_L} ${control_arm_W} ${control_arm_H}"/>
+        </geometry>
+      </collision>
+
+      <xacro:solid_cuboid_inertial
+         width="${control_arm_L}" depth="${control_arm_W}"
+         height="${control_arm_H}" mass="${control_arm_M}">
+      </xacro:solid_cuboid_inertial>
+    </link>
+
+
+  <!-- steer_beam to control_arm_left joint -->
+    <joint name="steer_beam_to_left_control_arm_joint" type="revolute">
+      <parent link="steer_beam"/>
+      <child link="control_arm_left"/>
+      <origin xyz="0 ${steer_beam_W/2 - joint_offset} ${steer_beam_H/2}" rpy="0 0 0"/>
+      <axis xyz="0 0 -1"/>
+      <limit effort="50" velocity="10"
+             lower="${-degrees_45}" upper="${degrees_45}"/>
+    </joint> 
+
+  <!-- steer_beam to control_arm_right joint -->
+    <joint name="steer_beam_to_right_control_arm_joint" type="revolute">
+      <parent link="steer_beam"/>
+      <child link="control_arm_right"/>
+      <origin xyz="0 ${-steer_beam_W/2 + joint_offset} ${steer_beam_H/2}" rpy="0 0 0"/>
+      <axis xyz="0 0 -1"/>
+      <limit effort="50" velocity="10"
+             lower="${-degrees_45}" upper="${degrees_45}"/>
+    </joint> 
+
+</robot>

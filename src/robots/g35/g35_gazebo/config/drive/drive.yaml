@@ -1,0 +1,19 @@
+drive:
+  Daccel_P: 200
+  Daccel_I: 80
+  Daccel_D: 1
+
+  Dcoast_P: 10
+  Dcoast_I: 0
+  Dcoast_D: 0
+
+  Dbrake_P: 250
+  Dbrake_I: 0
+  Dbrake_D: 0
+
+  D_Imax: 250
+  DTorque_max: 1000
+
+  WVelocity_max: 300
+  WFriction: 1
+  W_LC: False

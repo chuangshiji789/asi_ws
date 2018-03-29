@@ -1,0 +1,324 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="front_axle_assembly">
+
+  <!-- shock_lower_front_left -->
+    <link name="shock_lower_front_left">
+      <visual>
+        <origin xyz="0 0 0"/>
+        <geometry>
+          <cylinder radius="${shock_R}" length="${shock_H}"/>
+        </geometry>
+        <material name="tire_mat"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0"/>
+        <geometry>
+          <cylinder radius="${shock_R}" length="${shock_H}"/>
+        </geometry>
+      </collision>
+
+      <xacro:thick_walled_tube_inertial
+          inner_rad="${shock_R - shock_wall_thickness}" outer_rad="${shock_R}"
+          height="${shock_H}" mass="${shock_M}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:thick_walled_tube_inertial>
+    </link>
+
+  <!-- JOINT shock_lower_front_left TO shock_upper_front_left -->
+    <joint name="left_front_shock" type="prismatic">
+      <parent link="chassis"/>
+      <child link="shock_lower_front_left"/>
+      <origin xyz="${wheelbase/2} ${shock_y_offset} ${shock_z_offset - shock_H/2}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="0" upper="${wheel_travel_front}"
+             effort="${shock_eff_limit}" velocity="${shock_vel_limit}"/>
+    </joint>
+
+    <transmission name="front_left_shock_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_front_shock">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="front_left_shock_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  <!-- shock_lower_front_right -->
+    <link name="shock_lower_front_right">
+      <visual>
+        <origin xyz="0 0 0"/>
+        <geometry>
+          <cylinder radius="${shock_R}" length="${shock_H}"/>
+        </geometry>
+        <material name="tire_mat"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0"/>
+        <geometry>
+          <cylinder radius="${shock_R}" length="${shock_H}"/>
+        </geometry>
+      </collision>
+
+      <xacro:thick_walled_tube_inertial
+          inner_rad="${shock_R - shock_wall_thickness}" outer_rad="${shock_R}"
+          height="${shock_H}" mass="${shock_M}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:thick_walled_tube_inertial>
+    </link>
+
+  <!-- JOINT shock_lower_front_right TO shock_upper_front_right -->
+    <joint name="right_front_shock" type="prismatic">
+      <parent link="chassis"/>
+      <child link="shock_lower_front_right"/>
+      <origin xyz="${wheelbase/2} ${-shock_y_offset} ${shock_z_offset - shock_H/2}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="0" upper="${wheel_travel_front}"
+             effort="${shock_eff_limit}" velocity="${shock_vel_limit}"/>
+    </joint>
+
+    <transmission name="front_right_shock_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_front_shock">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="front_right_shock_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  <!-- steer_link_front_left -->
+    <link name="steer_link_front_left">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${steer_link_R}" length="${steer_link_H}"/>
+        </geometry>
+        <material name="tire_mat"/>
+      </visual>
+
+      <!-- <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${steer_link_R}" length="${steer_link_H}"/>
+        </geometry>
+      </collision> -->
+
+      <xacro:thick_walled_tube_inertial
+          inner_rad="${steer_link_R - shock_wall_thickness}" outer_rad="${steer_link_R}"
+          height="${steer_link_H}" mass="${steer_link_M}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:thick_walled_tube_inertial>
+    </link>
+
+  <!-- JOINT steer_link_front_left TO shock_lower_front_left -->
+    <joint name="left_steering_joint" type="revolute">
+      <parent link="shock_lower_front_left"/>
+      <child link="steer_link_front_left"/>
+      <origin xyz="0 ${front_axle_W/2 - shock_y_offset} -${shock_z_offset - shock_H/2 + chassis_H/2 + ground_clearance - wheel_front_R}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="${-degrees_45}" upper="${degrees_45}"
+             effort="${steer_stall_torque}" velocity="${steer_no_load_speed}"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+    <transmission name="front_left_steering_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_steering_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="front_left_steering_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  <!-- steer_link_front_right -->
+    <link name="steer_link_front_right">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${steer_link_R}" length="${steer_link_H}"/>
+        </geometry>
+        <material name="tire_mat"/>
+      </visual>
+
+      <!-- <collision>
+        <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+        <geometry>
+          <cylinder radius="${steer_link_R}" length="${steer_link_H}"/>
+        </geometry>
+      </collision> -->
+
+      <xacro:thick_walled_tube_inertial
+          inner_rad="${steer_link_R - shock_wall_thickness}" outer_rad="${steer_link_R}"
+          height="${steer_link_H}" mass="${steer_link_M}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:thick_walled_tube_inertial>
+    </link>
+
+  <!-- JOINT steer_link_front_right TO shock_lower_front_right -->
+    <joint name="right_steering_joint" type="revolute">
+      <parent link="shock_lower_front_right"/>
+      <child link="steer_link_front_right"/>
+      <origin xyz="0 -${front_axle_W/2 - shock_y_offset} -${shock_z_offset - shock_H/2 + chassis_H/2 + ground_clearance - wheel_front_R}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="${-degrees_45}" upper="${degrees_45}"
+             effort="${steer_stall_torque}" velocity="${steer_no_load_speed}"/>
+      <dynamics damping="0.0" friction="0.00"/>
+    </joint>
+
+    <transmission name="front_right_steering_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_steering_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="front_right_steering_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  <!-- wheel_front_left -->
+    <link name="left_front_wheel">
+      <!-- <visual>
+        <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_front_R}" length="${wheel_front_H}"/>
+        </geometry>
+        <material name="tire_mat"/>
+      </visual> -->
+
+      <visual>
+        <origin xyz="0 0 0" rpy="${-degrees_90} 0 0"/>
+        <geometry>
+            <mesh filename = "package://rc_car_description/meshes/wheel.dae" scale = "0.125 0.125 0.23" />
+        </geometry>
+        <material name="tire_mat"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_front_R}" length="${wheel_front_H}"/>
+        </geometry>
+      </collision>
+
+      <xacro:thick_walled_tube_inertial
+          inner_rad="${wheel_front_R - shock_wall_thickness}" outer_rad="${wheel_front_R}"
+          height="${wheel_front_H}" mass="${wheel_front_M}">
+      <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+      </xacro:thick_walled_tube_inertial>
+    </link>
+
+  <!-- JOINT wheel_front_left TO steer_link_front_left -->
+    <joint name="left_front_axle" type="continuous">
+      <parent link="steer_link_front_left"/>
+      <child link="left_front_wheel"/>
+      <origin xyz="0 0 0 "/>
+      <axis xyz="0 1 0"/>
+      <!-- <dynamics damping="0.01"/> -->
+      <limit effort="${axle_eff_limit}" velocity="${axle_vel_limit}"/>
+    </joint>
+
+    <transmission name="left_front_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_front_axle">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="left_front_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  <!-- wheel_front_right -->
+    <link name="right_front_wheel">
+      <!-- <visual>
+        <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_front_R}" length="${wheel_front_H}"/>
+        </geometry>
+        <material name="tire_mat"/>
+      </visual> -->
+
+      <visual>
+        <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+        <geometry>
+          <mesh filename="package://prowler_vehicle_description/meshes/wheel.dae" scale = "0.125 0.125 0.23"/>
+        </geometry>
+        <material name="tire_mat"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_front_R}" length="${wheel_front_H}"/>
+        </geometry>
+      </collision>
+
+      <xacro:thick_walled_tube_inertial
+          inner_rad="${wheel_front_R - shock_wall_thickness}" outer_rad="${wheel_front_R}"
+          height="${wheel_front_H}" mass="${wheel_front_M}">
+      <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+      </xacro:thick_walled_tube_inertial>
+    </link>
+
+  <!-- JOINT wheel_front_right TO steer_link_front_right -->
+    <joint name="right_front_axle" type="continuous">
+      <parent link="steer_link_front_right"/>
+      <child link="right_front_wheel"/>
+      <origin xyz="0 0 0 "/>
+      <axis xyz="0 1 0"/>
+      <!-- <dynamics damping="0.01"/> -->
+      <limit effort="${axle_eff_limit}" velocity="${axle_vel_limit}"/>
+    </joint>
+
+    <transmission name="right_front_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_front_axle">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="right_front_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+
+
+    <gazebo reference="right_front_wheel">
+	      <mu1>1</mu1>
+        <mu2>1</mu2>
+    		<kp>10000000</kp>
+    		<kd>1</kd>
+    		<minDepth>0.001</minDepth>
+    		<maxVel>10.0</maxVel>
+    </gazebo>
+
+    <gazebo reference="left_front_wheel">
+	      <mu1>1</mu1>
+        <mu2>1</mu2>
+    		<kp>10000000</kp>
+    		<kd>1</kd>
+    		<minDepth>0.001</minDepth>
+    		<maxVel>10.0</maxVel>
+    </gazebo>
+
+</robot>

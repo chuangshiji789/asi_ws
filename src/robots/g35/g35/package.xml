@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package>
+  <name>g35</name>
+  <version>0.1.3</version>
+  <description>
+    g35 is a group of packages for simulating an Infiniti G35 in Gazebo
+    with a ROS interface.
+  </description>
+
+  <maintainer email="vas0006@auburn.edu">
+    V
+  </maintainer>
+  <license>Apache 2.0</license>
+
+  <author email="vas0006@auburn.edu">V</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>g35_description</run_depend>
+  <run_depend>g35_gazebo</run_depend>
+
+  <export>
+    <architecture_independent/>
+    <metapackage/>
+  </export>
+</package>

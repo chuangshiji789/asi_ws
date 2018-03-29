@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<package>
+  <name>g35_gazebo</name>
+  <version>0.1.3</version>
+  <description>
+    g35 is a group of packages for simulating an Infiniti G35 in Gazebo
+    with a ROS interface.
+  </description>
+
+  <maintainer email="vas0006@auburn.edu">
+    V
+  </maintainer>
+  <license>Apache 2.0</license>
+
+  <author email="vas0006@auburn.edu">V</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>gazebo_plugins</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
+  <build_depend>ignition-math5</build_depend>
+
+  <run_depend>ackermann_msgs</run_depend>
+  <run_depend>g35_description</run_depend>
+  <run_depend>gazebo_ros</run_depend>
+  <run_depend>gazebo_plugins</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>nav_msgs</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>dynamic_reconfigure</run_depend>
+
+
+  <export>
+    <architecture_independent/>
+  </export>
+</package>

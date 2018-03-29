@@ -1,0 +1,36 @@
+digraph G {
+"steer_link_front_left" -> "left_front_wheel"[label="Broadcaster: /vehicle_state_publisher\nAverage rate: 20.250 Hz\nMost recent transform: 92.632 ( 0.039 sec old)\nBuffer length: 4.000 sec\n"];
+"shock_lower_front_left" -> "steer_link_front_left"[label="Broadcaster: /vehicle_state_publisher\nAverage rate: 20.250 Hz\nMost recent transform: 92.632 ( 0.039 sec old)\nBuffer length: 4.000 sec\n"];
+"shock_upper_front_left" -> "shock_lower_front_left"[label="Broadcaster: /vehicle_state_publisher\nAverage rate: 20.250 Hz\nMost recent transform: 92.632 ( 0.039 sec old)\nBuffer length: 4.000 sec\n"];
+"steer_link_rear_left" -> "left_rear_wheel"[label="Broadcaster: /vehicle_state_publisher\nAverage rate: 20.250 Hz\nMost recent transform: 92.632 ( 0.039 sec old)\nBuffer length: 4.000 sec\n"];
+"shock_upper_rear_left" -> "shock_lower_rear_left"[label="Broadcaster: /vehicle_state_publisher\nAverage rate: 20.250 Hz\nMost recent transform: 92.632 ( 0.039 sec old)\nBuffer length: 4.000 sec\n"];
+"steer_link_front_right" -> "right_front_wheel"[label="Broadcaster: /vehicle_state_publisher\nAverage rate: 20.250 Hz\nMost recent transform: 92.632 ( 0.039 sec old)\nBuffer length: 4.000 sec\n"];
+"shock_lower_front_right" -> "steer_link_front_right"[label="Broadcaster: /vehicle_state_publisher\nAverage rate: 20.250 Hz\nMost recent transform: 92.632 ( 0.039 sec old)\nBuffer length: 4.000 sec\n"];
+"shock_upper_front_right" -> "shock_lower_front_right"[label="Broadcaster: /vehicle_state_publisher\nAverage rate: 20.250 Hz\nMost recent transform: 92.632 ( 0.039 sec old)\nBuffer length: 4.000 sec\n"];
+"steer_link_rear_right" -> "right_rear_wheel"[label="Broadcaster: /vehicle_state_publisher\nAverage rate: 20.250 Hz\nMost recent transform: 92.632 ( 0.039 sec old)\nBuffer length: 4.000 sec\n"];
+"shock_upper_rear_right" -> "shock_lower_rear_right"[label="Broadcaster: /vehicle_state_publisher\nAverage rate: 20.250 Hz\nMost recent transform: 92.632 ( 0.039 sec old)\nBuffer length: 4.000 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 92.671"[ shape=plaintext ] ;
+ }->"shock_upper_front_left";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 92.671"[ shape=plaintext ] ;
+ }->"steer_link_rear_left";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 92.671"[ shape=plaintext ] ;
+ }->"shock_upper_rear_left";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 92.671"[ shape=plaintext ] ;
+ }->"shock_upper_front_right";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 92.671"[ shape=plaintext ] ;
+ }->"steer_link_rear_right";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 92.671"[ shape=plaintext ] ;
+ }->"shock_upper_rear_right";
+}

@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <world name="default">
+    <!-- Gravity -->
+    <physics type="ode">
+      <!--gravity>0 0 -1.6350</gravity --> <!-- 1/6 of 9.80665 -->
+      <gravity> 0 0 -9.80665</gravity>
+    </physics>
+
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+
+    <!-- A hightmap plane -->
+    <include>
+      <uri>model://rallycross_track</uri>
+    </include>
+    <!-- Starry sky -->
+
+    <!-- <gui> -->
+    <!--  <camera name="camera_world_main"> -->
+    <!--    <pose>57 15 1 0 0.05 1.4</pose> -->
+    <!--  </camera> -->
+    <!-- </gui> -->
+    <physics name='default_physics' default='0' type='ode'>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>300</iters>
+        </solver>
+      </ode>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+  </world>
+</sdf>

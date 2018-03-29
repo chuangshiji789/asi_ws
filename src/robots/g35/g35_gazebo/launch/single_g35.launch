@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="namespace" default="h0"/>
+  <arg name="tfpre" default="h0"/>
+  <arg name="teleop" default="false"/>
+  <arg name="teleop_port" default="/dev/input/js0"/>
+  <arg name="x" default="0.0"/>
+  <arg name="y" default="0.0"/>
+  <arg name="z" default="1"/>
+  <arg name="roll" default="0.0"/>
+  <arg name="pitch" default="0.0"/>
+  <arg name="yaw" default="0.0"/>
+
+    <!--Robot URDF-->
+   <param name="robot_description" command="$(find xacro)/xacro.py '$(find g35_description)/urdf/chassis/chassis.urdf.xacro'
+          nsp:=$(arg namespace)
+          tf_prefix:=$(arg tfpre)
+          " />
+
+    <!--Parameter server-->
+    <rosparam command="load" file="$(find g35_gazebo)/config/steering/steering.yaml" />
+    <rosparam command="load" file="$(find g35_gazebo)/config/drive/drive.yaml" />
+    <rosparam command="load" file="$(find g35_gazebo)/config/suspension/suspension.yaml" />
+    <param name="tf_prefix" value="$(arg tfpre)"/>
+    <!--Spawn robot-->
+    <node name="spawn_vehicle" pkg="gazebo_ros" type="spawn_model"
+          args="-urdf
+                -param robot_description
+                -model g35_$(arg namespace)
+                -x $(arg x) -y $(arg y) -z $(arg z)
+                -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
+
+    <!--State Publisher-->
+    <node name="robot_state_publisher" pkg="robot_state_publisher"
+          type="robot_state_publisher">
+      <param name="publish_frequency" value="100.0"/>
+      <!-- <param name="tf_prefix" value="$(arg tfpre)"/> -->
+    </node>
+
+    <!--Teleop-->
+    <group if="$(arg teleop)">
+      <include file="$(find robot_teleop)/launch/g35.launch">
+        <arg name="port" value="$(arg teleop_port)"/>
+      </include>
+    </group>
+
+</launch>

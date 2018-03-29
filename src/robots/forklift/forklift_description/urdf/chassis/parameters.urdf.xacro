@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="parameters">
+
+  <!-- Degree-to-radian conversions -->
+    <xacro:property name="degrees_45" value="0.785398163"/>
+    <xacro:property name="degrees_90" value="1.57079633"/>
+    <xacro:property name="tube_R" value="0.05"/>
+    <xacro:property name="thick_wall" value="0.01"/>
+
+
+  <!-- Chassis main inertial body -->
+    <xacro:property name="chassis_L" value="2.080"/>
+    <xacro:property name="chassis_W" value="1.270"/>
+    <xacro:property name="chassis_H" value="0.305"/>
+    <xacro:property name="chassis_M" value="3920"/>
+
+  <!-- Front and Rear Axles -->
+    <!-- distance from rear axle to front axle -->
+    <!-- <xacro:property name="wheelbase" value="0.205"/>  -->
+    <!-- radius of front axle -->
+    <!-- <xacro:property name="front_axle_R" value="${tube_R}"/>  -->
+    <xacro:property name="front_axle_W" value="1.184"/>
+    <xacro:property name="front_axle_X_offset" value="0.930"/>
+    <xacro:property name="front_axle_Z_offset" value="0.150"/>
+
+
+    <xacro:property name="rear_axle_X_offset" value="-0.880"/>
+    <xacro:property name="rear_axle_Z_offset" value="0.154"/>
+
+    <!-- radius of rear axle -->
+    <!-- <xacro:property name="rear_axle_R" value="${tube_R}"/>  -->
+    <!-- <xacro:property name="rear_axle_W" value="0.225"/> -->
+
+
+    <!-- The specifications for a Titan(R) 550 motor could not be found, so the
+         stall torque of a Mabuchi Motor(R) RS-550VC-7525 motor was used instead.
+
+         num_spur_gear_teeth = 68
+         num_pinion_gear_teeth = 19
+         final_gear_ratio = (num_spur_gear_teeth / num_pinion_gear_teeth) *
+           5.22 = 18.68
+         stall_torque = 0.549 N m
+         axle_eff_limit = ((2 * stall_torque) * final_gear_ratio) / 4 =
+           5.12766 N m
+
+         max_speed = 40 mph (30+ mph) = 17.8816 m/s
+         axle_vel_limit = (2 * pi) * (max_speed / (pi * tire_dia)) =
+           244.8696 rad/s -->
+    <xacro:property name="axle_eff_limit" value="1000"/>
+    <!-- 16 km/hr limit, 25.4 rad/s -->
+    <xacro:property name="axle_vel_limit" value="30"/>
+
+  <!-- Wheel Travel -->
+    <!-- <xacro:property name="ground_clearance" value="0.04"/> -->
+    <!-- <xacro:property name="wheel_travel_front" value="0.03"/> -->
+    <!-- <xacro:property name="wheel_travel_rear" value="15"/> -->
+
+  <!-- Wheels -->
+    <xacro:property name="wheel_front_R" value="0.171"/>
+    <xacro:property name="wheel_front_H" value="0.140"/>
+    <xacro:property name="wheel_front_M" value="0.2"/>
+
+    <xacro:property name="wheel_rear_R" value="0.175"/>
+    <xacro:property name="wheel_rear_H" value="0.025"/>
+    <xacro:property name="wheel_rear_M" value="20"/>
+
+
+    <!-- shock_eff_limit is 2 * ((shock_stroke / 2) * shock_spring_constant) N.
+         shock_stroke is 0.028575 meters. shock_spring_constant, an approximation
+         of a Traxxas Ultra Shock shock absorber spring's constant, is
+         437.817 N/m. -->
+    <xacro:property name="shock_eff_limit" value="100"/>
+    <xacro:property name="shock_vel_limit" value="1000"/>
+
+  <!-- Steering -->
+    <xacro:property name="steer_link_R" value="0.10"/>
+    <xacro:property name="steer_link_H" value="0.05"/>
+    <xacro:property name="steer_link_Y_offset" value="${steer_link_H/2 + wheel_rear_H/2}"/>
+    <!--Caster wheel stability -->
+    <xacro:property name="steer_link_X_offset" value="-0.05"/>
+    <xacro:property name="steer_link_M" value="5"/>
+    <!-- These constants are used to simulate a Traxxas 2056 servo operated at
+         6 V. servo_stall_torque is measured in N m. servo_no_load_speed is
+         measured in rad/s. -->
+    <xacro:property name="steer_stall_torque" value="500"/>
+    <xacro:property name="steer_no_load_speed" value="4.553"/>
+
+  <!--Elevator-->
+    <xacro:property name="elevator_L" value="0.15"/>
+    <xacro:property name="elevator_W" value="0.60"/>
+    <xacro:property name="elevator_H" value="0.60"/>
+    <xacro:property name="elevator_M" value="50"/>
+
+    <xacro:property name="elevator_X_offset" value="0.2"/>
+    <xacro:property name="elevator_Z_offset" value="${elevator_H/2 + chassis_H + 0.05}"/>
+
+<!--Rail-->
+  <xacro:property name="rail_L" value="0.10"/>
+  <xacro:property name="rail_W" value="0.20"/>
+  <xacro:property name="rail_H" value="0.20"/>
+  <xacro:property name="rail_M" value="50"/>
+
+  <xacro:property name="rail_X_offset" value="${elevator_L/2 + 0.2}"/>
+  <xacro:property name="rail_Z_offset" value="${-elevator_H/2 + swivel_H/2}"/>
+
+  <!--Swivel-->
+  <xacro:property name="swivel_L" value="0.60"/>
+  <xacro:property name="swivel_W" value="0.15"/>
+  <xacro:property name="swivel_H" value="0.15"/>
+  <xacro:property name="swivel_M" value="50"/>
+
+  <xacro:property name="swivel_X_offset" value="${elevator_L/2 + 0.2}"/>
+  <xacro:property name="swivel_Z_offset" value="0"/>
+
+</robot>

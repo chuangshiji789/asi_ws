@@ -1,0 +1,15 @@
+<launch>
+
+ <!-- joy node -->
+  <node respawn="true" pkg="joy"
+        type="joy_node" name="gamepad_joy" >
+    <param name="dev" type="string" value="/dev/input/js0" />
+    <param name="deadzone" value="0.12" />
+    <param name="autorepeat_rate" value="10" />
+  </node>
+
+  <!-- ackermann publisher node -->
+  <node pkg="robot_teleop" type="joy_to_ackermann.py" name="ackermann_joy" />
+  <!-- <node pkg="robot_teleop" type="teleop" name="teleop" output="screen"/> -->
+
+</launch>

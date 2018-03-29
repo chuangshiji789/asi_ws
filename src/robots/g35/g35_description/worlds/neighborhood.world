@@ -1,0 +1,243 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <world name="default">
+    <!-- <scene>
+      <sky>
+        <clouds>
+          <speed>3</speed>
+        </clouds>
+      </sky>
+    </scene> -->
+
+    <!-- A global light source -->
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose frame=''>0 0 30 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane2</uri>
+    </include>
+
+    <model name="initial_position">
+      <link name="marker">
+        <pose>0 -2.5 0.02 0 0 0</pose>
+        <!-- <collision name="small_indoor_scenario_collision">
+          <geometry>
+            <mesh>
+              <uri>file://small_indoor_scenario.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+        </collision> -->
+        <visual name="small_indoor_scenario">
+          <geometry>
+            <!-- <mesh>
+              <uri>file://small_indoor_scenario.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh> -->
+            <plane>
+              <normal>0 0 1</normal>
+              <size>5 2</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 0</emissive>
+          </material>
+          <!-- <material>
+            <script>Gazebo/Green</script>
+          </material> -->
+          <cast_shadows>false</cast_shadows>
+        </visual>
+      </link>
+      <static>true</static>
+    </model>
+
+    <model name="final_position">
+      <link name="marker">
+        <pose>90 -2.5 0.02 0 0 0</pose>
+        <!-- <collision name="small_indoor_scenario_collision">
+          <geometry>
+            <mesh>
+              <uri>file://small_indoor_scenario.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+        </collision> -->
+        <visual name="small_indoor_scenario">
+          <geometry>
+            <!-- <mesh>
+              <uri>file://small_indoor_scenario.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh> -->
+            <plane>
+              <normal>0 0 1</normal>
+              <size>5 2</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0 0 0 0</emissive>
+          </material>
+          <!-- <material>
+            <script>Gazebo/Green</script>
+          </material> -->
+          <cast_shadows>false</cast_shadows>
+        </visual>
+      </link>
+      <static>true</static>
+    </model>
+
+    <!-- Asphalt Plane -->
+    <!-- <include>
+      <uri>model://asphalt_plane2</uri>
+      <pose>0 0 0 0 0 0</pose>
+    </include> -->
+
+    <!-- Jersey Barriers -->
+    <!-- <include>
+      <uri>model://jersey_barrier</uri>
+      <pose>40 0 0 0 0 1.571 </pose>
+    </include> -->
+
+
+    <!--Cars-->
+    <include>
+      <uri>model://car_low_poly</uri>
+      <pose>10 6 0 0 0 0 </pose>
+    </include>
+
+    <include>
+      <uri>model://car_low_poly</uri>
+      <pose>20 6 0 0 0 0 </pose>
+    </include>
+
+
+
+    <include>
+      <uri>model://car_low_poly</uri>
+      <pose>20 -6 0 0 0 3.14 </pose>
+    </include>
+
+    <include>
+      <uri>model://car_low_poly</uri>
+      <pose>10 -6 0 0 0 3.14 </pose>
+    </include>
+
+  <!--Construction-->
+  <include>
+    <uri>model://construction_barrel</uri>
+    <pose>30 -4.5 0 0 0 3.14 </pose>
+  </include>
+  <include>
+    <uri>model://construction_barrel</uri>
+    <pose>30 -3.5 0 0 0 3.14 </pose>
+  </include>
+  <include>
+    <uri>model://construction_barrel</uri>
+    <pose>30 -2.5 0 0 0 3.14 </pose>
+  </include>
+  <include>
+    <uri>model://construction_barrel</uri>
+    <pose>32 -2.5 0 0 0 3.14 </pose>
+  </include>
+  <include>
+    <uri>model://construction_barrel</uri>
+    <pose>34 -2.5 0 0 0 3.14 </pose>
+  </include>
+  <include>
+    <uri>model://construction_barrel</uri>
+    <pose>36 -2.5 0 0 0 3.14 </pose>
+  </include>
+  <include>
+    <uri>model://construction_barrel</uri>
+    <pose>36 -3.5 0 0 0 3.14 </pose>
+  </include>
+  <include>
+    <uri>model://construction_barrel</uri>
+    <pose>36 -4.5 0 0 0 3.14 </pose>
+  </include>
+
+  <model name="mud_box">
+    <static>true</static>
+    <link name="link">
+      <pose>33 -3.5 0 0 0 0</pose>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>4 2 0.2</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual_1">
+        <pose>0 0 0 0 0 0</pose>
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <box>
+            <size>4 2 0.2</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://mud_box/materials/scripts</uri>
+            <uri>model://mud_box/materials/textures</uri>
+            <name>vrc/mud</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+
+  <!--Road 1-->
+  <road name="circuit">
+    <width>10</width>
+    <point>-150 0 0.01 </point>
+    <point>150 0 0.01 </point>
+  </road>
+
+  <!--Road 2-->
+  <road name="circuit2">
+    <width>10</width>
+    <point>0 -150 0.01 </point>
+    <point>0 150 0.01 </point>
+  </road>
+
+
+    <physics name='default_physics' default='0' type='ode'>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>400</iters>
+        </solver>
+      </ode>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+    <gui>
+     <camera name="camera_world_main">
+       <pose>0 0 20 0 0.7 0</pose>
+     </camera>
+    </gui>
+
+
+
+  </world>
+</sdf>

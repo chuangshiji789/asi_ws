@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="magnetometer">
+  <!-- <xacro:property name="M_PI" value="3.1415926535897931" /> -->
+  <xacro:property name="mag_link" value="0.05" /> <!-- Size of square 'camera' box -->
+  <xacro:macro name="magnetometer" params="parent name topic *origin">
+
+    <joint name="mag_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="mag_link"/>
+    </joint>
+
+    <!-- Camera -->
+    <link name="mag_link">
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+      <box size="${mag_link} ${mag_link} ${mag_link}"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+      <box size="${mag_link} ${mag_link} ${mag_link}"/>
+        </geometry>
+        <material name="red"/>
+      </visual>
+
+      <inertial>
+        <mass value="1e-5" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+      </inertial>
+    </link>
+
+    <!-- magnetometer -->
+    <gazebo>
+      <plugin name="quadrotor_magnetic_sim" filename="libhector_gazebo_ros_magnetic.so">
+        <updateRate>10.0</updateRate>
+        <bodyName>mag_link</bodyName>
+        <frameId>base_link</frameId>
+        <topicName>magnetic</topicName>
+        <offset>0 0 0</offset>
+        <drift>0.0 0.0 0.0</drift>
+        <gaussianNoise>1.3e-2 1.3e-2 1.3e-2</gaussianNoise>
+      </plugin>
+
+    </gazebo>
+
+
+  </xacro:macro>
+</robot>

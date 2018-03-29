@@ -1,0 +1,39 @@
+!!python/object/new:dynamic_reconfigure.encoding.Config
+dictitems:
+  SAngle_max: 8.0
+  SFriction: 0.0
+  SPos_D: 0.0
+  SPos_I: 0.0
+  SPos_Imax: 0.0
+  SPos_P: 2.0
+  STorque_max: 0.0
+  SVel_D: 0.0
+  SVel_I: 0.0
+  SVel_Imax: 0.0
+  SVel_P: 0.0
+  SVel_max: 5.0
+  groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+    dictitems:
+      SAngle_max: 8.0
+      SFriction: 0.0
+      SPos_D: 0.0
+      SPos_I: 0.0
+      SPos_Imax: 0.0
+      SPos_P: 2.0
+      STorque_max: 0.0
+      SVel_D: 0.0
+      SVel_I: 0.0
+      SVel_Imax: 0.0
+      SVel_P: 0.0
+      SVel_max: 5.0
+      groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      id: 0
+      name: Default
+      parameters: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      parent: 0
+      state: true
+      type: ''
+    state: []
+state: []

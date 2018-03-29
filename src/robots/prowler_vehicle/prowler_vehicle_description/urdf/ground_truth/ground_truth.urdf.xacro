@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ground_truth">
+  <!-- <xacro:property name="M_PI" value="3.1415926535897931" /> -->
+  <xacro:macro name="ground_truth" params="parent name topic *origin">
+
+    <!-- Ground Truth -->
+    <gazebo>
+      <plugin name="quadrotor_groundtruth_sim" filename="libgazebo_ros_p3d.so">
+        <updateRate>100.0</updateRate>
+        <bodyName>chassis</bodyName>
+        <topicName>ground_truth/state</topicName>
+        <gaussianNoise>0.0</gaussianNoise>
+        <frameName>world</frameName>
+      </plugin>
+
+    </gazebo>
+
+
+  </xacro:macro>
+</robot>

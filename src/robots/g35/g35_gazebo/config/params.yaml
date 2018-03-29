@@ -1,0 +1,36 @@
+vehicle_control_plugin:
+  SPos_P:       10
+  SPos_I:       0
+  SPos_D:       1
+  SPos_Imax:    10
+  SVel_max:     10
+  SVel_P:       1
+  SVel_I:       0
+  SVel_D:       0
+  SVel_Imax:    100
+  STorque_max:  1000
+  SFriction:    1
+  SAngle_max:   30
+
+  Daccel_P: 0
+  Daccel_I: 0
+  Daccel_D: 0
+  Dcoast_P: 0
+  Dcoast_I: 0
+  Dcoast_D: 0
+  Dbrake_P: 0
+  Dbrake_I: 0
+  Dbrake_D: 0
+  D_Imax: 0
+  DTorque_max: 0
+  WVelocity_max: 0
+  WFriction: 0
+  W_LC: False
+
+  K_P: 3700
+  K_I: 0
+  K_D: 600
+  K_Imax: 3700
+  KForce_max: 3900
+  KVelocity_max: 1000
+  KStop_max: 0.4

@@ -1,0 +1,61 @@
+#!/usr/bin/env python
+import rospy
+from std_msgs.msg import String
+from std_msgs.msg import Float64
+from sensor_msgs.msg import Joy
+from controller_manager_msgs.srv import ListControllers
+
+# from ackermann_msgs.msg import AckermannDrive
+
+def callback(data):
+    # rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
+    position = data.axes[3] * wheel_travel/2
+    # steer = data.axes[2]
+
+    # print "%.4f  %.4f" % (speed, steer)
+
+    # convert to ackermann msg
+
+    # ack_cmd = AckermannDrive()
+    # ack_cmd.steering_angle = steer
+    # pub.publish(ack_cmd)
+    pub.publish(position)
+
+
+# def _wait_for_ctrlr(list_ctrlrs, ctrlr_name):
+#     # Wait for the specified controller to be in the "running" state.
+#     # Commands can be lost if they are published before their controller is
+#     # running, even if a latched publisher is used.
+
+#     while True:
+#         response = list_ctrlrs()
+#         for ctrlr in response.controller:
+#             if ctrlr.name == ctrlr_name:
+#                 if ctrlr.state == "running":
+#                     return
+#                 rospy.sleep(0.1)
+#                 break
+
+
+if __name__ == '__main__':
+
+    rospy.init_node('shock_publisher', anonymous=True)
+    pub = rospy.Publisher('left_front_shock_ctrlr/command', Float64, queue_size=1)
+    rospy.Subscriber('joy', Joy, callback)
+
+    position = 0
+    wheel_travel = 0.30
+
+    list_ctrlrs = rospy.ServiceProxy("controller_manager/list_controllers",
+                                     ListControllers)
+    list_ctrlrs.wait_for_service()
+
+    # _wait_for_ctrlr(list_ctrlrs, ctrlr_name)
+
+
+    r = rospy.Rate(10) # 10hz
+    while not rospy.is_shutdown():
+    # hello_str = "hello world %s" % rospy.get_time()
+    # rospy.loginfo(hello_str)
+        # rate.sleep()
+        rospy.spin()

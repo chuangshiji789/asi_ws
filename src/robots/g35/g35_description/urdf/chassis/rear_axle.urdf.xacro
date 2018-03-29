@@ -1,0 +1,237 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rear_axle_assembly">
+
+
+
+
+  <!-- shock_lower_rear_left -->
+    <link name="shock_lower_rear_left">
+      <visual>
+        <origin xyz="0 0 0"/>
+        <geometry>
+          <cylinder radius="${shock_R}" length="${shock_H}"/>
+        </geometry>
+        <material name="tire_mat"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0"/>
+        <geometry>
+          <cylinder radius="${shock_R}" length="${shock_H}"/>
+        </geometry>
+      </collision>
+
+      <xacro:thick_walled_tube_inertial
+          inner_rad="${shock_R - shock_wall_thickness}" outer_rad="${shock_R}"
+          height="${shock_H}" mass="${shock_M}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:thick_walled_tube_inertial>
+    </link>
+
+  <!-- JOINT shock_lower_rear_left TO chassis -->
+    <joint name="left_rear_shock" type="prismatic">
+      <parent link="chassis"/>
+      <child link="shock_lower_rear_left"/>
+      <origin xyz="-${wheelbase/2} ${shock_y_offset} ${shock_z_offset}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="0" upper="${wheel_travel_rear}"
+             effort="${shock_eff_limit}" velocity="${shock_vel_limit}"/>
+    </joint>
+
+    <transmission name="rear_left_shock_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_rear_shock">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="rear_left_shock_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  <!-- shock_lower_rear_right -->
+    <link name="shock_lower_rear_right">
+      <visual>
+        <origin xyz="0 0 0"/>
+        <geometry>
+          <cylinder radius="${shock_R}" length="${shock_H}"/>
+        </geometry>
+        <material name="tire_mat"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0"/>
+        <geometry>
+          <cylinder radius="${shock_R}" length="${shock_H}"/>
+        </geometry>
+      </collision>
+
+      <xacro:thick_walled_tube_inertial
+          inner_rad="${shock_R - shock_wall_thickness}" outer_rad="${shock_R}"
+          height="${shock_H}" mass="${shock_M}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:thick_walled_tube_inertial>
+    </link>
+
+  <!-- JOINT shock_lower_rear_right TO shock_upper_rear_right -->
+    <joint name="right_rear_shock" type="prismatic">
+      <parent link="chassis"/>
+      <child link="shock_lower_rear_right"/>
+      <origin xyz="-${wheelbase/2} ${-shock_y_offset} ${shock_z_offset}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="0" upper="${wheel_travel_rear}"
+             effort="${shock_eff_limit}" velocity="${shock_vel_limit}"/>
+    </joint>
+
+    <transmission name="rear_right_shock_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_rear_shock">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="rear_right_shock_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+
+
+  <!-- wheel_rear_left -->
+    <link name="left_rear_wheel">
+      <!-- <visual>
+        <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_rear_R}" length="${wheel_rear_H}"/>
+        </geometry>
+        <material name="tire_mat"/>
+      </visual> -->
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://g35_description/meshes/wheel_2004_Infiniti_G35_Sedan.dae" scale = "0.95 0.95 0.95" />
+        </geometry>
+        <material name="tire_mat"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_rear_R}" length="${wheel_rear_H}"/>
+        </geometry>
+      </collision>
+
+      <xacro:thick_walled_tube_inertial
+          inner_rad="${wheel_rear_R - shock_wall_thickness}" outer_rad="${wheel_rear_R}"
+          height="${wheel_rear_H}" mass="${wheel_rear_M}">
+      <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+      </xacro:thick_walled_tube_inertial>
+    </link>
+
+  <!-- JOINT wheel_rear_left TO shock_lower_rear_left -->
+    <joint name="left_rear_axle" type="continuous">
+      <parent link="shock_lower_rear_left"/>
+      <child link="left_rear_wheel"/>
+      <!-- <origin xyz="0 ${front_axle_W/2 - shock_y_offset} ${-shock_z_offset + shock_H/2 - chassis_H/2 - ground_clearance + wheel_front_R}"/> -->
+      <origin xyz="0 ${front_axle_W/2 - shock_y_offset} ${-shock_H/2-wheel_z_offset}"/>
+      <axis xyz="0 1 0"/>
+      <dynamics damping="0.0" friction="0.0"/>
+      <limit effort="${axle_eff_limit}" velocity="${axle_vel_limit}"/>
+    </joint>
+
+    <transmission name="left_rear_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_rear_axle">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="left_rear_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <!-- wheel_rear_right -->
+      <link name="right_rear_wheel">
+        <!-- <visual>
+          <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+          <geometry>
+            <cylinder radius="${wheel_rear_R}" length="${wheel_rear_H}"/>
+          </geometry>
+          <material name="tire_mat"/>
+        </visual> -->
+
+        <visual>
+          <origin xyz="0 0 0" rpy="${-2*degrees_90} 0 0"/>
+          <geometry>
+            <mesh filename="package://g35_description/meshes/wheel_2004_Infiniti_G35_Sedan.dae" scale = "0.95 0.95 0.95" />
+          </geometry>
+          <material name="tire_mat"/>
+        </visual>
+
+        <collision>
+          <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+          <geometry>
+            <cylinder radius="${wheel_rear_R}" length="${wheel_rear_H}"/>
+          </geometry>
+        </collision>
+
+        <xacro:thick_walled_tube_inertial
+            inner_rad="${wheel_rear_R - shock_wall_thickness}" outer_rad="${wheel_rear_R}"
+            height="${wheel_rear_H}" mass="${wheel_rear_M}">
+        <origin xyz="0 0 0" rpy="${degrees_90} 0 0"/>
+        </xacro:thick_walled_tube_inertial>
+      </link>
+
+    <!-- JOINT wheel_rear_right TO steer_link_rear_right -->
+      <joint name="right_rear_axle" type="continuous">
+        <parent link="shock_lower_rear_right"/>
+        <child link="right_rear_wheel"/>
+        <origin xyz="0 -${front_axle_W/2 - shock_y_offset} ${-shock_H/2-wheel_z_offset}"/>
+        <axis xyz="0 1 0"/>
+        <dynamics damping="0.0" friction="0.0"/>
+        <limit effort="${axle_eff_limit}" velocity="${axle_vel_limit}"/>
+      </joint>
+
+      <transmission name="right_rear_axle_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="right_rear_axle">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="right_rear_axle_act">
+          <!-- This hardwareInterface element exists for compatibility
+               with ROS Hydro. -->
+          <hardwareInterface>EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+
+
+
+      <gazebo reference="right_rear_wheel">
+          <mu1>1</mu1>
+          <mu2>1</mu2>
+          <kp>10000000</kp>
+          <kd>1</kd>
+          <minDepth>0.001</minDepth>
+          <maxVel>10.0</maxVel>
+      </gazebo>
+
+      <gazebo reference="left_rear_wheel">
+          <mu1>1</mu1>
+          <mu2>1</mu2>
+          <kp>10000000</kp>
+          <kd>1</kd>
+          <minDepth>0.001</minDepth>
+          <maxVel>10.0</maxVel>
+      </gazebo>
+
+
+
+
+</robot>

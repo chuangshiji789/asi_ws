@@ -1,0 +1,35 @@
+<launch>
+
+  <!-- Start ROSbag node -->
+
+  <node pkg="wgs_conversions" type="wgs_conversions_server" name="wgs_server" required="true">
+  </node>
+
+  <include file="$(find loosely_coupled_ekf)/launch/online.launch" />
+
+  <node pkg="rosbag" type="play" name="playback" args="/home/stephen/bagfiles/prowler_skid_pad/prowler_set1_2017-06-13-13-29-12.bag" >
+  </node>
+
+  <!-- Start NMPC node -->
+ 	<node pkg="obst_avoid_nmpc_v2" type="obst_avoid_nmpc_node" name="obst_avoid_nmpc" output="screen" required="true">
+      <param type="double" name="avoidance_radius" value="3" />
+      <param type="double" name="prediction_horizon" value="3.0" />
+      <param type="double" name="max_velocity" value="8.0" />
+      <!-- Target location: 1_1, 1_2, 1_3, 1_4, 2_1, 2_2, 2_3 -->
+      <rosparam param="target_LLA"> [32.595738694677260,-85.295371370981930,175.2830845369157] </rosparam>
+      <!-- <rosparam param="target_LLA"> [32.595736075030565,-85.295385099308480,175.1619812574555] </rosparam>  -->
+      <!-- <rosparam param="target_LLA"> [32.595749375841750,-85.295411110465650,174.7114021250948] </rosparam> -->
+      <!-- <rosparam param="target_LLA"> [32.595735149703580,-85.295382673769370,175.2853427034241] </rosparam> -->
+      <!-- <rosparam param="target_LLA"> [32.595724159416860,-85.295376429095940,174.4441676417629] </rosparam> -->
+      <!-- <rosparam param="target_LLA"> [32.595253531188360,-85.294898232871100,174.0398325871546] </rosparam> -->
+      <!-- <rosparam param="target_LLA"> [32.595247113963026,-85.294882616015410,174.0019299889576] </rosparam> -->
+
+      <!-- Set the Vehicle being used -->
+      <!-- IF VEHICLE_ID = 0, THEN Prowler -->
+      <!--               = 1, THEN G35 -->
+      <param type="int" name="VEHICLE_ID" value="0" />
+
+ 	</node>
+
+
+</launch>

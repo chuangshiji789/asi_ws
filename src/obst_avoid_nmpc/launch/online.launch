@@ -1,0 +1,60 @@
+<launch>
+
+  <!-- Start ROSbag node -->
+
+  <node pkg="wgs_conversions" type="wgs_conversions_server" name="wgs_server" required="true">
+  </node>
+
+  <!-- Start NMPC node -->
+ 	<node pkg="obst_avoid_nmpc_v2" type="obst_avoid_nmpc_node" name="obst_avoid_nmpc" output="screen" required="true">
+
+      <!-- Avoidance radius is not being used right now because avoidance is just -->
+      <!-- a soft constraint -->
+      <param type="double" name="avoidance_radius" value="3.0" />
+      <!-- Prediction horizon -->
+      <param type="double" name="prediction_horizon" value="5.0" />
+      <!-- Max allowed velocity by the controller [m/s] -->
+      <param type="double" name="max_velocity" value="5.0" />
+
+      <!-- Controller Weights -->
+      <!-- gamma: weight on distance to target -->
+      <param type="double" name="gamma" value="50.0" />
+      <!-- zeta: weight on inverse of minimum obstacle distance -->
+      <param type="double" name="zeta" value="280000.0" />
+      <!-- kappa: weight on yaw error to target -->
+      <param type="double" name="kappa" value="1000.0" />
+      <!-- epsilon: weight on normal error on target path -->
+      <param type="double" name="epsilon" value="200.0" />
+
+      <!-- Target location: -->
+      <!-- If you record a target lat,long,alt, you can enter it here and the -->
+      <!-- wgs_conversions service will convert it to ENU. You must set -->
+      <!-- PROVIDE_TARGET_LLA to true for this to work. Otherwise, the -->
+      <!-- controller will assume the target position is in ENU. -->
+      <param type="bool" name="PROVIDE_TARGET_LLA" value="false" />
+      <rosparam param="target_POS"> [2.5,90,0] </rosparam>
+
+      <!-- Set the Vehicle being used -->
+      <!-- IF VEHICLE_ID = 0, THEN Prowler -->
+      <!--               = 1, THEN G35 -->
+      <param type="int" name="VEHICLE_ID" value="1" />
+
+      <!-- Cost Function Types: lines 197-217 in obst_avoid_nmpc_v2.cpp -->
+      <!-- The first set of functions are for when an obstacle is in view, the -->
+      <!-- second set are for when no obstacles are in view -->
+      <!-- IF ARE_OBSTACLES_COST_FUNCTION = 0, J = 0.5*(gamma*dist_tar^2 + zeta*(1/min_dist_ob)^2 + epsilon*err_norm^2 + kappa*err_yaw^2) -->
+      <!--                                = 1, J = 0.5*(gamma*dist_tar^2 + zeta*(1/min_dist_ob)^2 + kappa*err_yaw^2) -->
+      <!--                                = 2, J = 0.5*(gamma*dist_tar^2 + zeta*(1/min_dist_ob)^2 + epsilon*err_norm^2) -->
+      <!--                                = 3, J = 0.5*(gamma*dist_tar^2 + zeta*(1/min_dist_ob)^2) -->
+      <param type="double" name="ARE_OBSTACLES_COST_FUNCTION" value="0" />
+      <!-- IF NO_OBSTACLES_COST_FUNCTION = 0, J = 0.5*(gamma*dist_tar^2 + epsilon*err_norm^2 + kappa*err_yaw^2) -->
+      <!--                               = 1, J = 0.5*(gamma*dist_tar^2 + kappa*err_yaw^2) -->
+      <!--                               = 2, J = 0.5*(gamma*dist_tar^2 + epsilon*err_norm^2) -->
+      <!--                               = 3, J = 0.5*(gamma*dist_tar^2) -->
+      <param type="double" name="NO_OBSTACLES_COST_FUNCTION" value="0" />
+
+
+ 	</node>
+
+
+</launch>

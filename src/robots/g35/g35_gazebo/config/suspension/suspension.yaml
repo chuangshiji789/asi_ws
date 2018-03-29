@@ -1,0 +1,9 @@
+suspension:
+  K_P: 42500
+  K_I: 0
+  K_D: 1500
+  K_Imax: 37000
+
+  KForce_max: 50000
+  KVelocity_max: 1000
+  KStop_max: 0.2

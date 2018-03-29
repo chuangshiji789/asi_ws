@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="carriage_assembly">
+
+  <!--Elevator-->
+  <link name="elevator_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${elevator_L} ${elevator_W} ${elevator_H}"/>
+        <!-- <mesh filename="package://forklift_description/meshes/forklift_base.dae" /> -->
+        <scale>1 1 1</scale>
+      </geometry>
+      <material name="tire_mat"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${elevator_L} ${elevator_W} ${elevator_H}"/>
+      </geometry>
+    </collision>
+
+    <xacro:solid_cuboid_inertial
+        width="${elevator_L}" depth="${elevator_W}"
+        height="${elevator_H}" mass="${elevator_M}">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:solid_cuboid_inertial>
+  </link>
+
+
+  <!--Elevator TO chassis joint-->
+    <joint name="elevator_joint" type="prismatic">
+      <parent link="chassis"/>
+      <child link="elevator_link"/>
+      <origin xyz="${elevator_X_offset} 0 ${elevator_Z_offset}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="0" upper="1000"
+             effort="1000" velocity="1000"/>
+    </joint>
+
+    <transmission name="elevator_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="elevator_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="elevator_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  <!--Rail-->
+    <link name="rail_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${rail_L} ${rail_W} ${rail_H}"/>
+          <!-- <mesh filename="package://forklift_description/meshes/forklift_base.dae" /> -->
+          <scale>1 1 1</scale>
+        </geometry>
+        <material name="tire_mat"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${rail_L} ${rail_W} ${rail_H}"/>
+        </geometry>
+      </collision>
+
+      <xacro:solid_cuboid_inertial
+          width="${rail_L}" depth="${rail_W}"
+          height="${rail_H}" mass="${rail_M}">
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:solid_cuboid_inertial>
+    </link>
+
+
+    <!--Rail TO Elevator joint-->
+      <joint name="rail_joint" type="prismatic">
+        <parent link="elevator_link"/>
+        <child link="rail_link"/>
+        <origin xyz="${rail_X_offset} 0 ${rail_Z_offset}"/>
+        <axis xyz="0 1 0"/>
+        <limit lower="-1" upper="1"
+               effort="1000" velocity="1000"/>
+      </joint>
+
+      <transmission name="rail_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rail_joint">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rail_act">
+          <!-- This hardwareInterface element exists for compatibility
+               with ROS Hydro. -->
+          <hardwareInterface>EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+
+<!--Swivel-->
+<link name="swivel_link">
+  <visual>
+    <origin xyz="${swivel_L/2} 0 0" rpy="0 0 0"/>
+    <geometry>
+      <box size="${swivel_L} ${swivel_W} ${swivel_H}"/>
+      <!-- <mesh filename="package://forklift_description/meshes/forklift_base.dae" /> -->
+      <scale>1 1 1</scale>
+    </geometry>
+    <material name="tire_mat"/>
+  </visual>
+
+  <collision>
+    <origin xyz="${swivel_L/2} 0 0" rpy="0 0 0"/>
+    <geometry>
+      <box size="${swivel_L} ${swivel_W} ${swivel_H}"/>
+    </geometry>
+  </collision>
+
+  <xacro:solid_cuboid_inertial
+      width="${swivel_L}" depth="${swivel_W}"
+      height="${swivel_H}" mass="${swivel_M}">
+      <origin xyz="${swivel_L/2} 0 0" rpy="0 0 0"/>
+  </xacro:solid_cuboid_inertial>
+</link>
+
+
+<!--Swivel TO Rail joint-->
+  <joint name="swivel_joint" type="revolute">
+    <parent link="rail_link"/>
+    <child link="swivel_link"/>
+    <origin xyz="${swivel_X_offset} 0 ${swivel_Z_offset}"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="${-degrees_90}" upper="${degrees_90}"
+           effort="1000" velocity="1000"/>
+  </joint>
+
+  <transmission name="swivel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="swivel_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="swivel_act">
+      <!-- This hardwareInterface element exists for compatibility
+           with ROS Hydro. -->
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+</robot>
